@@ -1,0 +1,56 @@
+package org.auckland.ac.nz;
+
+import java.io.*;
+import java.awt.Component;
+
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacv.*;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.opencv_core.CvPoint;
+import org.bytedeco.javacpp.opencv_core.CvScalar;
+import org.bytedeco.javacpp.opencv_core.CvSeq;
+import org.bytedeco.javacpp.opencv_core.IplImage;
+import org.bytedeco.javacpp.opencv_highgui.CvCapture;
+
+
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_calib3d.*;
+import static org.bytedeco.javacpp.opencv_objdetect.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
+import org.bytedeco.javacv.FrameGrabber.Exception;
+
+/**
+ * 
+ * @author ebaguia
+ *
+ */
+public class VIDIVOXVideoController {
+    
+    private File avFile = null;
+    private Component mainPanel = null;
+    private CvCapture capture = null;
+    private final CanvasFrame avCanvass = new CanvasFrame("Test Player");
+
+    /**
+     * 
+     */
+    public VIDIVOXVideoController(Component mainPanel, File avFile) {
+        this.mainPanel = mainPanel;
+        this.avFile = avFile;
+        //frameGrabber = new FFmpegFrameGrabber(avFile);
+    }
+    
+    public void captureFFMPEGFrame() throws Exception, IOException {
+        IplImage frame;
+        String avFileName = avFile.getCanonicalPath();
+        capture = cvCreateFileCapture(avFileName);
+        cvNamedWindow("Video", CV_WINDOW_AUTOSIZE);
+        
+        while(true) {
+            frame = cvQueryFrame(capture);
+            cvShowImage("Video", frame);
+            cvWaitKey();
+        }
+    }
+}

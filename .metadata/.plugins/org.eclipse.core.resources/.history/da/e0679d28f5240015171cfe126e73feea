@@ -1,0 +1,70 @@
+package org.auckland.ac.nz;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class VIDIVOX {
+
+	private JFrame frmVidivoxUniversityOf;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VIDIVOX window = new VIDIVOX();
+					window.frmVidivoxUniversityOf.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public VIDIVOX() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmVidivoxUniversityOf = new JFrame();
+		frmVidivoxUniversityOf.setTitle("VIDIVOX University of Auckland (c) 2005");
+		frmVidivoxUniversityOf.setBounds(100, 100, 550, 400);
+		frmVidivoxUniversityOf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frmVidivoxUniversityOf.setJMenuBar(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+		
+		JMenu mnOpen = new JMenu("Open");
+		mnFile.add(mnOpen);
+		
+		JMenu mnClose = new JMenu("Close");
+		mnFile.add(mnClose);
+		
+		JMenu mnExit = new JMenu("Exit");
+		mnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frmVidivoxUniversityOf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			}
+		});
+		mnFile.add(mnExit);
+	}
+
+}

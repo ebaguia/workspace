@@ -1,0 +1,13 @@
+package org.auckland.ac.nz;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+
+public class VIDIVOXUserNotifications {
+	private JDialog exitNotificationDialog = new JDialog();
+	
+	public VIDIVOXUserNotifications() {
+		
+	}
+}

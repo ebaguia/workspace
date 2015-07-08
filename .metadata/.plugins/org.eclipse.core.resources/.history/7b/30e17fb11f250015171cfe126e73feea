@@ -1,0 +1,45 @@
+package org.auckland.ac.nz;
+
+import java.io.*;
+import java.awt.Component;
+
+import org.bytedeco.javacpp.opencv_core.IplImage;
+import org.bytedeco.javacpp.opencv_highgui.CvCapture;
+import org.bytedeco.javacv.*;
+import org.bytedeco.javacv.FrameGrabber.Exception;
+
+/**
+ * 
+ * @author ebaguia
+ *
+ */
+public class VIDIVOXVideoController {
+    
+    private File avFile = null;
+    private Component mainPanel = null;
+    private FFmpegFrameGrabber frameGrabber = null;
+    private CvCapture capture = null;
+    private final CanvasFrame avCanvass = new CanvasFrame("Test Player");
+
+    /**
+     * 
+     */
+    public VIDIVOXVideoController(Component mainPanel, File avFile) {
+        this.mainPanel = mainPanel;
+        this.avFile = avFile;
+        frameGrabber = new FFmpegFrameGrabber(avFile);
+    }
+    
+    public void captureFFMPEGFrame() throws Exception {
+        IplImage frame;
+        cvNamedWindow("Video", CV_WINDOW_AUTOSIZE);
+        
+        /*frameGrabber.start();
+        
+        while(true) {
+            img = frameGrabber.grab();
+            avCanvass.setCanvasSize(frameGrabber.getImageWidth(), frameGrabber.getImageHeight());
+            avCanvass.showImage(frameGrabber.grab());
+        }*/
+    }
+}

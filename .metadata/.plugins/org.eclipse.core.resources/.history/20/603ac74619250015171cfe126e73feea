@@ -1,0 +1,32 @@
+package org.auckland.ac.nz;
+
+import java.io.*;
+import javax.swing.JPanel;
+import org.bytedeco.javacv.*;
+import org.bytedeco.javacv.FrameGrabber.Exception;
+
+/**
+ * 
+ * @author ebaguia
+ *
+ */
+public class VIDIVOXVideoController {
+    
+    private File avFile = null;
+    private JPanel mainPanel = null;
+    private FFmpegFrameGrabber frameGrabber = null;
+    private final CanvasFrame avCanvass = new CanvasFrame("Test Player");
+
+    /**
+     * 
+     */
+    public VIDIVOXVideoController(JPanel mainPanel, File avFile) {
+        this.mainPanel = mainPanel;
+        this.avFile = avFile;
+        frameGrabber = new FFmpegFrameGrabber(avFile);
+    }
+    
+    public void captureFFMPEGFrame() throws Exception {
+         avCanvass.showImage(frameGrabber.grab());
+    }
+}

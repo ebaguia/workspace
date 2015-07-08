@@ -1,0 +1,147 @@
+package org.auckland.ac.nz;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.*;
+
+import org.auckland.ac.nz.*;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+
+public class VIDIVOX {
+
+    /* The main application frame */
+	private JFrame frmVidivoxUniversityOf;
+	
+	/* Instance of the user notification class */
+	private VIDIVOXUserNotifications notification = null;
+	
+	private VIDIVOXVideoController avController = null;
+	
+	private File avFile = null;
+	
+	private JMenu mnPlay = null;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VIDIVOX window = new VIDIVOX();
+					window.frmVidivoxUniversityOf.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public VIDIVOX() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmVidivoxUniversityOf = new JFrame();
+		frmVidivoxUniversityOf.setTitle("VIDIVOX University of Auckland (c) 2005");
+		frmVidivoxUniversityOf.setBounds(100, 100, 550, 400);
+		frmVidivoxUniversityOf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmVidivoxUniversityOf.getContentPane().setLayout(null);
+		
+		notification = new VIDIVOXUserNotifications(frmVidivoxUniversityOf);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frmVidivoxUniversityOf.setJMenuBar(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+		
+		// "File" menu items listener implementations
+		// 
+		JMenu mnOpen = new JMenu("Open");
+		mnOpen.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		        try {
+                    avFile = notification.openSaveFile(VIDIVOXUserNotifications.FileOperation.OPEN_FILE);
+                    if(null != avFile) {
+                        mnPlay.setEnabled(true);
+                    }
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+		    }
+		});
+		mnFile.add(mnOpen);
+		
+		JMenu mnSave = new JMenu("Save");
+		mnSave.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    avFile = notification.openSaveFile(VIDIVOXUserNotifications.FileOperation.SAVE_FILE);
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+        });
+		mnFile.add(mnSave);
+		
+		JMenu mnExit = new JMenu("Exit");
+		mnExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			    notification.exitNotification();
+			}
+		});
+		mnFile.add(mnExit);
+		
+		JMenu mnEdit = new JMenu("Edit");
+		menuBar.add(mnEdit);
+		
+		JMenu mnActions = new JMenu("Actions");
+		menuBar.add(mnActions);
+		
+		/*JMenu*/ mnPlay = new JMenu("Play");
+        mnPlay.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                avController = new VIDIVOXVideoController();
+            }
+        });
+		mnPlay.setEnabled(false);
+		mnActions.add(mnPlay);
+		
+		JMenu mnHelp = new JMenu("Help");
+		menuBar.add(mnHelp);
+		GroupLayout groupLayout = new GroupLayout(frmVidivoxUniversityOf.getContentPane());
+		groupLayout.setHorizontalGroup(
+		    groupLayout.createParallelGroup(Alignment.LEADING)
+		        .addGap(0, 550, Short.MAX_VALUE)
+		);
+		groupLayout.setVerticalGroup(
+		    groupLayout.createParallelGroup(Alignment.LEADING)
+		        .addGap(0, 379, Short.MAX_VALUE)
+		);
+		frmVidivoxUniversityOf.getContentPane().setLayout(groupLayout);
+	}
+
+}

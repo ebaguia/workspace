@@ -1,0 +1,22 @@
+package org.auckland.ac.nz;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import java.awt.Dimension;
+
+
+public class VIDIVOXUserNotifications {
+	private JFrame mainFrame = null;
+	private JDialog exitNotificationDialog = null;
+	
+	public VIDIVOXUserNotifications(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+	}
+	
+	public void exitNotification() {
+		if(null != mainFrame) {
+			exitNotificationDialog = new JDialog(mainFrame, "Exit Application", true);
+			exitNotificationDialog.setPreferredSize(new Dimension(200,50));
+		}
+	}
+}
