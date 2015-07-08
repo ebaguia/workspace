@@ -1,0 +1,17 @@
+This project will show us how to use VLCJ when playing and editing audio/video files. The target environment is #58~14.04.1-Ubuntu SMP Mon Jun 22 10:21:20 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+
+Requirements:
+LIBVLC
+  - sudo apt-get install libvlc-dev
+  - sudo apt-get install vlc
+
+VLCJ
+  - add all VLCJ Java libraries as the project library dependencies
+  - slf4j-api (logging library being used by VLCJ)
+  - slf4j-jdk14 (logging library being used by VLCJ)
+
+JNA
+  - jna
+  - jna-platform
+
+The versions of the libraries above are latest as of the initial build. You may have to check if there are updates.
