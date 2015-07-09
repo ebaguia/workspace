@@ -31,4 +31,22 @@ public class VIDIVOXMediaController {
             mediaPlayerComponent.getMediaPlayer().playMedia(mediaFile.getCanonicalPath());
         }
     }
+    
+    public void pause() {
+        if(mediaPlayerComponent.isValid()) {
+            mediaPlayerComponent.getMediaPlayer().pause();
+        }
+    }
+    
+    public void stop() {
+        if(mediaPlayerComponent.isValid()) {
+            mediaPlayerComponent.getMediaPlayer().stop();
+        }
+    }
+    
+    public void resume() {
+        if(mediaPlayerComponent.isValid()) {
+            mediaPlayerComponent.getMediaPlayer().play();
+        }
+    }
 }

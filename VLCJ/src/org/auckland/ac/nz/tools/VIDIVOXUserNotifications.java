@@ -28,7 +28,6 @@ public class VIDIVOXUserNotifications {
 	  OPEN_FILE,
 	  SAVE_FILE
 	};
-	private final String EXIT_APPLICATION_MSG = new String("Are you sure you want to exit from the application?");
 	
 	/**
 	 * 
@@ -43,13 +42,13 @@ public class VIDIVOXUserNotifications {
 	 */
 	public void exitNotification() {
 		if(null != mainFrame) {
-		    JButton yesButton = new JButton("Yes");
-            JButton noButton = new JButton("No");
+		    JButton yesButton = new JButton(VIDIVOXCommonInternals.YES_MSG);
+            JButton noButton = new JButton(VIDIVOXCommonInternals.NO_MSG);
 		    
 		    notifyPanel = new JPanel();
-		    notifyPanel.add(new JLabel(EXIT_APPLICATION_MSG));
+		    notifyPanel.add(new JLabel(VIDIVOXCommonInternals.EXIT_NOTIFICATION));
 		    
-			exitNotificationDialog = new JDialog(mainFrame, "Exit Application", true);
+			exitNotificationDialog = new JDialog(mainFrame, VIDIVOXCommonInternals.EXIT_APP, true);
 			exitNotificationDialog.setPreferredSize(new Dimension(380,60));
 			exitNotificationDialog.setResizable(false);
 			exitNotificationDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -81,6 +80,12 @@ public class VIDIVOXUserNotifications {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param operation
+	 * @return
+	 * @throws IOException
+	 */
 	public File openSaveFile(FileOperation operation) throws IOException {
 	    File selectedFile = null;
 	    JFileChooser openSaveFileDialog = new JFileChooser(new File(".").getCanonicalPath());

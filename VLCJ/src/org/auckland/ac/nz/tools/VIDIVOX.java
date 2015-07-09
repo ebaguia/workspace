@@ -9,7 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 
@@ -26,14 +25,6 @@ import java.io.*;
  *
  */
 public class VIDIVOX {
-    
-    /* This defines the items in our menu */
-    private enum MenuItems {
-        OPEN,
-        SAVE,
-        EXIT,
-        PLAY
-    };
     
     private JMenu menuItems[];
     
@@ -87,27 +78,27 @@ public class VIDIVOX {
         });
         
         notification = new VIDIVOXUserNotifications(frame);
-        menuItems = new JMenu[MenuItems.values().length];
+        menuItems = new JMenu[VIDIVOXCommonInternals.MenuItems.values().length];
         
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
         
         // FILE Menu
         //
-        JMenu mnFile = new JMenu("File");
+        JMenu mnFile = new JMenu(VIDIVOXCommonInternals.MENU_FILE);
         menuBar.add(mnFile);
         
         // FILE -> OPEN Menu
         //
-        menuItems[MenuItems.OPEN.ordinal()] = new JMenu("Open");
-        menuItems[MenuItems.OPEN.ordinal()].addMouseListener(new MouseAdapter() {
+        menuItems[VIDIVOXCommonInternals.MenuItems.OPEN.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_FILE_OPEN);
+        menuItems[VIDIVOXCommonInternals.MenuItems.OPEN.ordinal()].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
                     mediaFile = notification.openSaveFile(FileOperation.OPEN_FILE);
                     
                     if(mediaFile.isFile()) {
-                        menuItems[MenuItems.PLAY.ordinal()].setEnabled(true);
+                        menuItems[VIDIVOXCommonInternals.MenuItems.PLAY.ordinal()].setEnabled(true);
                     }
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
@@ -115,12 +106,12 @@ public class VIDIVOX {
                 }
             }
         });
-        mnFile.add(menuItems[MenuItems.OPEN.ordinal()]);
+        mnFile.add(menuItems[VIDIVOXCommonInternals.MenuItems.OPEN.ordinal()]);
         
         // FILE -> SAVE Menu
         //
-        menuItems[MenuItems.SAVE.ordinal()] = new JMenu("Save");
-        menuItems[MenuItems.SAVE.ordinal()].addMouseListener(new MouseAdapter() {
+        menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_FILE_SAVE);
+        menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
@@ -133,40 +124,46 @@ public class VIDIVOX {
         });
         // TODO: save file functionality
         //
-        menuItems[MenuItems.SAVE.ordinal()].setEnabled(false);
-        mnFile.add(menuItems[MenuItems.SAVE.ordinal()]);
+        menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()].setEnabled(false);
+        mnFile.add(menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()]);
         
         // FILE -> EXIT Menu
         //
-        menuItems[MenuItems.EXIT.ordinal()] = new JMenu("Exit");
-        menuItems[MenuItems.EXIT.ordinal()].addMouseListener(new MouseAdapter() {
+        menuItems[VIDIVOXCommonInternals.MenuItems.EXIT.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_FILE_EXIT);
+        menuItems[VIDIVOXCommonInternals.MenuItems.EXIT.ordinal()].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 notification.exitNotification();
             }
         });
-        menuItems[MenuItems.EXIT.ordinal()].addActionListener(new ActionListener() {
+        menuItems[VIDIVOXCommonInternals.MenuItems.EXIT.ordinal()].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 notification.exitNotification();
             }
         });
-        mnFile.add(menuItems[MenuItems.EXIT.ordinal()]);
+        mnFile.add(menuItems[VIDIVOXCommonInternals.MenuItems.EXIT.ordinal()]);
         
         // ACTIONS Menu
         //
-        JMenu mnActions = new JMenu("Actions");
+        JMenu mnActions = new JMenu(VIDIVOXCommonInternals.MENU_ACTIONS);
         menuBar.add(mnActions);
         
         // ACTIONS -> PLAY Menu
         //
-        menuItems[MenuItems.PLAY.ordinal()] = new JMenu("Play");
-        menuItems[MenuItems.PLAY.ordinal()].addMouseListener(new MouseAdapter() {
+        menuItems[VIDIVOXCommonInternals.MenuItems.PLAY.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_ACTIONS_PLAY);
+        menuItems[VIDIVOXCommonInternals.MenuItems.PLAY.ordinal()].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    if(menuItems[MenuItems.PLAY.ordinal()].isEnabled()) {
+                    if(menuItems[VIDIVOXCommonInternals.MenuItems.PLAY.ordinal()].isEnabled()) {
                         mediaController.setMediaFile(mediaFile);
                         mediaController.play();
+                        
+                        // Enable other operations once the video is playing
+                        //
+                        menuItems[VIDIVOXCommonInternals.MenuItems.PAUSE.ordinal()].setEnabled(true);
+                        menuItems[VIDIVOXCommonInternals.MenuItems.RESUME.ordinal()].setEnabled(true);
+                        menuItems[VIDIVOXCommonInternals.MenuItems.STOP.ordinal()].setEnabled(true);
                     }
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
@@ -174,8 +171,61 @@ public class VIDIVOX {
                 }
             }
         });
-        menuItems[MenuItems.PLAY.ordinal()].setEnabled(false);
-        mnActions.add(menuItems[MenuItems.PLAY.ordinal()]);
+        menuItems[VIDIVOXCommonInternals.MenuItems.PLAY.ordinal()].setEnabled(false);
+        mnActions.add(menuItems[VIDIVOXCommonInternals.MenuItems.PLAY.ordinal()]);
+        
+        // ACTIONS -> PAUSE Menu
+        //
+        menuItems[VIDIVOXCommonInternals.MenuItems.PAUSE.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_ACTIONS_PAUSE);
+        menuItems[VIDIVOXCommonInternals.MenuItems.PAUSE.ordinal()].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(menuItems[VIDIVOXCommonInternals.MenuItems.PAUSE.ordinal()].isEnabled()) {
+                    mediaController.setMediaFile(mediaFile);
+                    mediaController.pause();
+                }
+            }
+        });
+        menuItems[VIDIVOXCommonInternals.MenuItems.PAUSE.ordinal()].setEnabled(false);
+        mnActions.add(menuItems[VIDIVOXCommonInternals.MenuItems.PAUSE.ordinal()]);
+        
+        // ACTIONS -> RESUME Menu
+        //
+        menuItems[VIDIVOXCommonInternals.MenuItems.RESUME.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_ACTIONS_RESUME);
+        menuItems[VIDIVOXCommonInternals.MenuItems.RESUME.ordinal()].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(menuItems[VIDIVOXCommonInternals.MenuItems.RESUME.ordinal()].isEnabled()) {
+                    mediaController.setMediaFile(mediaFile);
+                    mediaController.resume();
+                }
+            }
+        });
+        menuItems[VIDIVOXCommonInternals.MenuItems.RESUME.ordinal()].setEnabled(false);
+        mnActions.add(menuItems[VIDIVOXCommonInternals.MenuItems.RESUME.ordinal()]);
+        
+        // ACTIONS -> STOP Menu
+        //
+        menuItems[VIDIVOXCommonInternals.MenuItems.STOP.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_ACTIONS_STOP);
+        menuItems[VIDIVOXCommonInternals.MenuItems.STOP.ordinal()].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(menuItems[VIDIVOXCommonInternals.MenuItems.STOP.ordinal()].isEnabled()) {
+                    mediaController.setMediaFile(mediaFile);
+                    mediaController.stop();
+                    menuItems[VIDIVOXCommonInternals.MenuItems.PAUSE.ordinal()].setEnabled(false);
+                    menuItems[VIDIVOXCommonInternals.MenuItems.RESUME.ordinal()].setEnabled(false);
+                    menuItems[VIDIVOXCommonInternals.MenuItems.STOP.ordinal()].setEnabled(false);
+                }
+            }
+        });
+        menuItems[VIDIVOXCommonInternals.MenuItems.STOP.ordinal()].setEnabled(false);
+        mnActions.add(menuItems[VIDIVOXCommonInternals.MenuItems.STOP.ordinal()]);
+        
+        // EDIT Menu
+        //
+        menuItems[VIDIVOXCommonInternals.MenuItems.EDIT.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_EDIT);
+        menuBar.add(menuItems[VIDIVOXCommonInternals.MenuItems.EDIT.ordinal()]);
         
         // Initialize the VLCJ media player
         //
