@@ -14,4 +14,7 @@ JNA
   - jna
   - jna-platform
 
+Optional development environment:
+Eclipse + WindowBuilder for developing Java SWING
+
 The versions of the libraries above are latest as of the initial build. You may have to check if there are updates.
