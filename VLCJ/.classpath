@@ -2,14 +2,16 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="./libs/jna.jar"/>
-	<classpathentry kind="lib" path="./libs/jna-platform.jar"/>
-	<classpathentry kind="lib" path="./libs/slf4j-api-1.7.12.jar"/>
-	<classpathentry kind="lib" path="./libs/slf4j-jdk14-1.7.12.jar"/>
-	<classpathentry kind="lib" path="./libs/vlcj-3.8.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="./libs/vlcj-3.8.0-SNAPSHOT-javadoc.jar"/>
-	<classpathentry kind="lib" path="./libs/vlcj-3.8.0-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="./libs/vlcj-3.8.0-SNAPSHOT-tests.jar"/>
-	<classpathentry kind="lib" path="./libs/vlcj-3.8.0-SNAPSHOT-test-sources.jar"/>
+	<classpathentry kind="lib" path="libs/jna.jar"/>
+	<classpathentry kind="lib" path="libs/jna-platform.jar"/>
+	<classpathentry kind="lib" path="libs/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="libs/slf4j-jdk14-1.7.12.jar"/>
+	<classpathentry kind="lib" path="libs/vlcj-3.8.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/ebag753/workspace/git-workspace/TestApp/libs/vlcj-3.8.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/ebag753/workspace/git-workspace/TestApp/libs/vlcj-3.8.0-SNAPSHOT-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/ebag753/workspace/git-workspace/TestApp/libs/vlcj-3.8.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="/home/ebag753/workspace/git-workspace/TestApp/libs/vlcj-3.8.0-SNAPSHOT-tests.jar"/>
+	<classpathentry kind="lib" path="/home/ebag753/workspace/git-workspace/TestApp/libs/vlcj-3.8.0-SNAPSHOT-test-sources.jar"/>
+	<classpathentry kind="lib" path="/home/ebag753/workspace/git-workspace/TestApp/libs/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
