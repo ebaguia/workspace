@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * This class implements the extra functionalities useful by the tool such 
@@ -22,6 +23,23 @@ public class VIDIVOXProcessBuilder {
     
     private Process process;
     
+    private List<String> command = null;
+    
+    public VIDIVOXLogger logger = VIDIVOXLogger.getInstance();
+    
+    /**
+     * Initializes the necessary items needed when starting a process.
+     * 
+     * @param processName
+     * @param processArguments
+     */
+    public VIDIVOXProcessBuilder(List<String> command) {
+        this.processName = null;
+        this.processArguments = null;
+        this.command = command;
+        logger.logInfo("VIDIVOXProcessBuilder()::VIDIVOXProcessBuilder() command = " + command);
+    }
+    
     /**
      * Initializes the necessary items needed when starting a process.
      * 
@@ -31,6 +49,9 @@ public class VIDIVOXProcessBuilder {
     public VIDIVOXProcessBuilder(String processName, String processArguments) {
         this.processName = processName;
         this.processArguments = processArguments;
+        this.command = null;
+        logger.logInfo("VIDIVOXProcessBuilder()::VIDIVOXProcessBuilder() processName = " + processName);
+        logger.logInfo("VIDIVOXProcessBuilder()::VIDIVOXProcessBuilder() processArguments = " + processArguments);
     }
     
     /**
@@ -47,11 +68,14 @@ public class VIDIVOXProcessBuilder {
         try {
             String streamLine;
             while((streamLine = bufferReader.readLine()) != null) {
-                processOutput += streamLine;
+                processOutput += "\n" + streamLine;
             }
+            
+            inputStream.close();
+            inputStreamReader.close();
+            bufferReader.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.logError(e.getMessage());
         }
     }
     
@@ -63,26 +87,34 @@ public class VIDIVOXProcessBuilder {
             process = new ProcessBuilder(processName, processArguments).start();
             processOutputStream();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.logError(e.getMessage());
         }
     }
     
     /**
      * Run extrenal command and sync.
      */
-    public void startAndWait() {
+    public int startAndWait() {
+        int exitCode = 1;
         try {
-            process = new ProcessBuilder(processName, processArguments).start();
-            process.wait();
+            ProcessBuilder processBuilder;
+            if(command == null) {
+                processBuilder = new ProcessBuilder(processName, processArguments);
+            }
+            else {
+                processBuilder = new ProcessBuilder(command);
+            }
+            processBuilder.redirectErrorStream(true);
+            process = processBuilder.start();
+            exitCode = process.waitFor();
             processOutputStream();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.logError(e.getMessage());
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.logError(e.getMessage());
         }
+        
+        return exitCode;
     }
     
     /**

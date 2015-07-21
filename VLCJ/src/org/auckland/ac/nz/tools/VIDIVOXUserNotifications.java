@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
+import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -22,6 +24,7 @@ public class VIDIVOXUserNotifications {
 	private JFrame mainFrame = null;
 	private JDialog exitNotificationDialog = null;
 	private JPanel notifyPanel = null;
+	private EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
 	
 	/* Constants */
 	public enum FileOperation {
@@ -36,6 +39,15 @@ public class VIDIVOXUserNotifications {
 	public VIDIVOXUserNotifications(JFrame mainFrame) {
 		this.mainFrame = mainFrame;
 	}
+	
+	/**
+     * 
+     * @param mainFrame
+     */
+    public VIDIVOXUserNotifications(JFrame mainFrame, EmbeddedMediaPlayerComponent mediaPlayerComponent) {
+        this.mainFrame = mainFrame;
+        this.mediaPlayerComponent = mediaPlayerComponent;
+    }
 	
 	/**
 	 * Handles the notification when the user exits the application.
@@ -57,7 +69,9 @@ public class VIDIVOXUserNotifications {
 			    @Override public void actionPerformed(ActionEvent a) {
 			        // We are now going to exit the application
 			        //
-			        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			        if((mediaPlayerComponent != null) && (mediaPlayerComponent.isValid())) {
+			            mediaPlayerComponent.release();
+			        }
 	                System.exit(0);
 			    }
 			});
