@@ -23,6 +23,12 @@ public final class VIDIVOXCommonInternals {
         CFR,
         CFS
     };
+    
+    public enum Operation {
+        CUT_AUDIO,
+        CFR,
+        CFS
+    }
 
     public final static String YES_MSG = "Yes";
     public final static String NO_MSG = "No";
@@ -51,7 +57,9 @@ public final class VIDIVOXCommonInternals {
     public final static String FFMPEG_BIN = "/usr/local/bin/ffmpeg";
     public final static String FFMPEG_SECONDS = "00:00:";
     
-    public final static int COL_ROW = 10;
+    public final static int COL_ROW = 20;
+    
+    public final static String[] CONFIG_COL_NAMES = {"Item", "Value"};
     
 }
 

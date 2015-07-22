@@ -1,10 +1,8 @@
 package org.auckland.ac.nz.tools;
 
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionListener;
@@ -12,47 +10,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.sound.sampled.AudioFileFormat.Type;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 
-import uk.co.caprica.vlcj.component.AudioMediaPlayerComponent;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
-import uk.co.caprica.vlcj.player.MediaMeta;
-import uk.co.caprica.vlcj.player.MediaPlayer;
-import uk.co.caprica.vlcj.test.VlcjTest;
-import uk.co.caprica.vlcj.test.basic.EqualizerFrame;
-import uk.co.caprica.vlcj.test.basic.PlayerControlsPanel;
-import uk.co.caprica.vlcj.test.basic.PlayerVideoAdjustPanel;
-
 import org.auckland.ac.nz.tools.VIDIVOXUserNotifications.FileOperation;
 import java.io.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.Border;
+import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-import javax.swing.JLabel;
-import java.awt.GridLayout;
-import javax.swing.JTextField;
-import java.awt.BorderLayout;
 import javax.swing.JTextArea;
-import java.awt.SystemColor;
-import javax.swing.UIManager;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-import javax.swing.border.CompoundBorder;
 
 /**
  * 
@@ -83,10 +56,6 @@ public class VIDIVOX{
     
     private EmbeddedMediaPlayerComponent mediaPlayerComponent;
     
-    private MediaPlayer mediaPlayer;
-    
-    private VIDIVOXLogger logger;
-    
     private File mediaFile;
     
     private VIDIVOXCutAudio editAudioVideo;
@@ -94,6 +63,8 @@ public class VIDIVOX{
     private VIDIVOXFrameSize frameSize;
     
     private VIDIVOXPlayerControlsPanel playerControlsPane;
+    
+    private JTabbedPane tabbedPane = null;
     
     /**
      * Launch the application.
@@ -123,7 +94,7 @@ public class VIDIVOX{
      * Initialize the contents of the frame.
      */
     private void initialize() {
-        logger = VIDIVOXLogger.getInstance();
+        VIDIVOXLogger.getInstance();
         frame = new JFrame();
         frame.getContentPane().setBackground(new Color(240, 230, 140));
         frame.setBounds(200, 200, 793, 787);
@@ -335,18 +306,11 @@ public class VIDIVOX{
         playerControlsPane.setBounds(0, 364, 793, 89);
         frame.getContentPane().add(playerControlsPane);
         
-        JLabel lblSettings = new JLabel("Settings");
-        lblSettings.setBounds(10, 454, 70, 15);
-        frame.getContentPane().add(lblSettings);
-        
         notification = new VIDIVOXUserNotifications(frame, mediaPlayerComponent);
         
-        JLabel lblOutput = new JLabel("Output");
-        lblOutput.setBounds(10, 612, 70, 15);
-        frame.getContentPane().add(lblOutput);
+        tabbedPane = new JTabbedPane();
         
-        String[] settingsColNames = {"Item", "Value"};
-        settingsTable = new JTable(new VIDIVOXSettingsTableModel(settingsColNames, VIDIVOXCommonInternals.COL_ROW));
+        settingsTable = new JTable(new VIDIVOXSettingsTableModel(VIDIVOXCommonInternals.CONFIG_COL_NAMES, VIDIVOXCommonInternals.COL_ROW));
         settingsTable.setFillsViewportHeight(false);
         settingsTable.setSize(500, 100);
         settingsTable.getColumnModel().getColumn(0).setCellRenderer(new VIDIVOXCellRenderer());
@@ -355,16 +319,32 @@ public class VIDIVOX{
         settingsTable.getTableHeader().setFont(font.deriveFont(Font.BOLD));
         
         settingsScrollPane = new JScrollPane();
-        settingsScrollPane.setBounds(10, 471, 635, 126);
         settingsScrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
         settingsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         settingsScrollPane.setVisible(true);
         settingsScrollPane.setViewportView(settingsTable);
-        frame.getContentPane().add(settingsScrollPane);
+        tabbedPane.add("Settings", settingsScrollPane);
         
-        editAudioVideo = new VIDIVOXCutAudio(frame, settingsTable, mediaFile);
-        frameRate = new VIDIVOXFrameRate(frame, settingsTable, mediaFile);
-        frameSize  = new VIDIVOXFrameSize(frame, settingsTable, mediaFile);
+        outputStreamTextArea = new JTextArea();
+        outputStreamTextArea.setEditable(false);
+        outputStreamTextArea.setVisible(true);
+        outputAreaScrollPane = new JScrollPane(outputStreamTextArea);
+        outputAreaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        outputAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        tabbedPane.setBounds(0, 454, 793, 220);
+        tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+        tabbedPane.add("Output", outputAreaScrollPane);
+        frame.getContentPane().add(tabbedPane);
+        
+        buttonsPanel = new JPanel();
+        buttonsPanel.setBounds(0, 675, 793, 63);
+        buttonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+        buttonsPanel.setLayout(new GridBagLayout());
+        frame.getContentPane().add(buttonsPanel);
+        
+        editAudioVideo = new VIDIVOXCutAudio(frame, settingsTable, outputStreamTextArea, buttonsPanel, mediaFile);
+        frameRate = new VIDIVOXFrameRate(frame, settingsTable, outputStreamTextArea, buttonsPanel, mediaFile);
+        frameSize  = new VIDIVOXFrameSize(frame, settingsTable, outputStreamTextArea, buttonsPanel, mediaFile);
     }
     
     private void setComponentsEnabled(boolean bEnabled) {

@@ -3,17 +3,17 @@
  */
 package org.auckland.ac.nz.tools;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.border.LineBorder;
 
 /**
  * @author ebag753
@@ -21,8 +21,6 @@ import javax.swing.border.LineBorder;
  */
 public class VIDIVOXAudioVideoOperation {
     public JFrame mainFrame = null;
-    
-    public JScrollPane settingsScrollPane = null;
     
     public JScrollPane outputScrollPane = null;
     
@@ -38,38 +36,41 @@ public class VIDIVOXAudioVideoOperation {
     
     public SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     
-    public JPanel buttonsPanel = null;
-    
-    public JTextArea outputStreamTextArea = null;
-    
     public VIDIVOXSettingsTableModel settingsTableModel= null;
     
+    public JTextArea outputTextArea = null;
+    
+    public JButton btnOperation = null;
+    
+    public JButton btnCancel = null;
+    
+    public JPanel buttonsPanel = null;
+    
     public VIDIVOXAudioVideoOperation(JFrame mainFrame,
-                                      File mediaFile, JTable settingsTable) {
+                                      File mediaFile, JTable settingsTable, JTextArea outputTextArea, JPanel buttonsPanel) {
         logger.logInfo("VIDIVOXAudioVideoOperation::VIDIVOXAudioVideoOperation() Constructor");
         this.mainFrame = mainFrame; 
         this.mediaFile = mediaFile;
         this.settingsTable = settingsTable;
+        this.outputTextArea = outputTextArea;
+        this.buttonsPanel = buttonsPanel;
     }
     
     public void initialize() {
         logger.logInfo("VIDIVOXAudioVideoOperation::initialize()");
+        btnCancel = new JButton();
+        btnCancel.setText("Reset");
+        btnCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                clearConfiguration();
+                setConfiguration();
+            }
+        });
+        buttonsPanel.add(btnCancel);
         
-        buttonsPanel = new JPanel();
-        buttonsPanel.setBounds(657, 471, 126, 129);
-        buttonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-        buttonsPanel.setLayout(null);
-        mainFrame.getContentPane().add(buttonsPanel);
-        
-        outputStreamTextArea = new JTextArea();
-        //outputStreamTextArea.setLineWrap(true);
-        outputStreamTextArea.setEditable(false);
-        outputStreamTextArea.setVisible(true);
-        outputScrollPane = new JScrollPane(outputStreamTextArea);
-        outputScrollPane.setBounds(10, 631, 771, 98);
-        outputScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        outputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        mainFrame.getContentPane().add(outputScrollPane);
+        btnOperation = new JButton();
+        buttonsPanel.add(btnOperation);
     }
     
     public void setMediaFile(File mediaFile) {
@@ -94,6 +95,10 @@ public class VIDIVOXAudioVideoOperation {
             ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(0);
             ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(VIDIVOXCommonInternals.COL_ROW);
         }
+    }
+    
+    public void clearOutputTextArea() {
+        outputTextArea.setText(null);
     }
 }
 
