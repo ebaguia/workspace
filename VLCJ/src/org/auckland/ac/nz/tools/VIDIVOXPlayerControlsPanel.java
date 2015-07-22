@@ -482,3 +482,4 @@ public class VIDIVOXPlayerControlsPanel extends JPanel {
         volumeSlider.setValue(value);
     }
 }
+

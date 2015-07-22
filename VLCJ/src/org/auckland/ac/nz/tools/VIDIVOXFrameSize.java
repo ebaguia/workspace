@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 /**
@@ -28,9 +29,9 @@ public class VIDIVOXFrameSize extends VIDIVOXAudioVideoOperation {
     
     private JButton btnCancel;
     
-    public VIDIVOXFrameSize(JFrame mainFrame, 
-                                 File mediaFile) {
-        super(mainFrame, mediaFile, 4);
+    public VIDIVOXFrameSize(JFrame mainFrame, JTable settingsTable,
+            File mediaFile) {
+        super(mainFrame, mediaFile, settingsTable);
         logger.logInfo("VIDIVOXFrameSize::VIDIVOXFrameSize()");
         super.initialize();
         initialize();
@@ -145,8 +146,8 @@ public class VIDIVOXFrameSize extends VIDIVOXAudioVideoOperation {
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                clearFrameSizeSettings();
-                frameSizeSettings();
+                clearConfiguration();
+                setConfiguration();
             }
         });
         
@@ -161,7 +162,6 @@ public class VIDIVOXFrameSize extends VIDIVOXAudioVideoOperation {
     public void setComponentsVisible(boolean aFlag) {
         btnChangeFrameSize.setVisible(aFlag);
         btnCancel.setVisible(aFlag);
-        settingsTable.setVisible(aFlag);
         buttonsPanel.setVisible(aFlag);
         outputScrollPane.setVisible(aFlag);
     }
@@ -169,24 +169,11 @@ public class VIDIVOXFrameSize extends VIDIVOXAudioVideoOperation {
     public void setComponentsEnabled(boolean bEnabled) {
         btnChangeFrameSize.setEnabled(bEnabled);
         btnCancel.setEnabled(bEnabled);
-        settingsTable.setEnabled(bEnabled);
         buttonsPanel.setEnabled(bEnabled);
         outputScrollPane.setEnabled(bEnabled);
     }
     
-    public void setMediaFile(File mediaFile) {
-        this.mediaFile = mediaFile;
-    }
-    
-    public void clearFrameSizeSettings() {
-        logger.logInfo("VIDIVOXFrameSize::clearframeSizeSettings()");
-        if(((VIDIVOXSettingsTableModel)settingsTable.getModel()).getRowCount() > 0) {
-            ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(0);
-            ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(4);
-        }
-    }
-    
-    public void frameSizeSettings() {
+    public void setConfiguration() {
         logger.logInfo("VIDIVOXFrameSize::frameSizeSettings()");
         // First column
         //
@@ -194,9 +181,6 @@ public class VIDIVOXFrameSize extends VIDIVOXAudioVideoOperation {
         settingsTable.setValueAt("Height in pixels", 1, 0);
         settingsTable.setValueAt("Input filename", 2, 0);
         settingsTable.setValueAt("Ouput filename", 3, 0);
-        
-        settingsTable.setValueAt("320", 0, 1);
-        settingsTable.setValueAt("240", 1, 1);
         
         try {
             // Retrieve the input file
@@ -213,6 +197,10 @@ public class VIDIVOXFrameSize extends VIDIVOXAudioVideoOperation {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        // Second column
+        //
+        settingsTable.setValueAt("320", 0, 1);
+        settingsTable.setValueAt("240", 1, 1);
     }
-
 }

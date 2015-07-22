@@ -50,3 +50,4 @@ public class VIDIVOXLogger {
         logger.error(logString, arg1);
     }
 }
+

@@ -37,3 +37,4 @@ public class VIDIVOXCellRenderer extends JTextArea implements TableCellRenderer 
       return this;
   }
 } 
+

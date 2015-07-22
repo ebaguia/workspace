@@ -51,4 +51,7 @@ public final class VIDIVOXCommonInternals {
     public final static String FFMPEG_BIN = "/usr/local/bin/ffmpeg";
     public final static String FFMPEG_SECONDS = "00:00:";
     
+    public final static int COL_ROW = 10;
+    
 }
+

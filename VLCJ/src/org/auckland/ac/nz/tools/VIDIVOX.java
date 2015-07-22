@@ -2,6 +2,7 @@ package org.auckland.ac.nz.tools;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.WindowAdapter;
@@ -58,7 +59,7 @@ import javax.swing.border.CompoundBorder;
  * @author ebag753
  *
  */
-public class VIDIVOX extends VlcjTest{
+public class VIDIVOX{
     
     private JMenu menuItems[];
     
@@ -73,6 +74,8 @@ public class VIDIVOX extends VlcjTest{
     private JPanel buttonsPanel;
     
     private JTextArea outputStreamTextArea;
+    
+    private JTable settingsTable;
     
     private VIDIVOXUserNotifications notification;
     
@@ -251,11 +254,11 @@ public class VIDIVOX extends VlcjTest{
                     if(mediaPlayerComponent.getMediaPlayer().isPlaying()) {
                         mediaPlayerComponent.getMediaPlayer().stop();
                     }
-                    clearSettingsTable();
+                    editAudioVideo.clearConfiguration();
                     setComponentsEnabled(false);
                     setComponentsVisible(false);
                     editAudioVideo.setMediaFile(mediaFile);
-                    editAudioVideo.cutAudioSettings();
+                    editAudioVideo.setConfiguration();
                     editAudioVideo.setComponentsEnabled(true);
                     editAudioVideo.setComponentsVisible(true);
                 }
@@ -277,11 +280,11 @@ public class VIDIVOX extends VlcjTest{
                     if(mediaPlayerComponent.getMediaPlayer().isPlaying()) {
                         mediaPlayerComponent.getMediaPlayer().stop();
                     }
-                    clearSettingsTable();
+                    frameRate.clearConfiguration();
                     setComponentsEnabled(false);
                     setComponentsVisible(false);
                     frameRate.setMediaFile(mediaFile);
-                    frameRate.frameRateSettings();
+                    frameRate.setConfiguration();
                     frameRate.setComponentsEnabled(true);
                     frameRate.setComponentsVisible(true);
                 }
@@ -303,11 +306,11 @@ public class VIDIVOX extends VlcjTest{
                     if(mediaPlayerComponent.getMediaPlayer().isPlaying()) {
                         mediaPlayerComponent.getMediaPlayer().stop();
                     }
-                    clearSettingsTable();
+                    frameSize.clearConfiguration();
                     setComponentsEnabled(false);
                     setComponentsVisible(false);
                     frameSize.setMediaFile(mediaFile);
-                    frameSize.frameSizeSettings();
+                    frameSize.setConfiguration();
                     frameSize.setComponentsEnabled(true);
                     frameSize.setComponentsVisible(true);
                 }
@@ -342,15 +345,26 @@ public class VIDIVOX extends VlcjTest{
         lblOutput.setBounds(10, 612, 70, 15);
         frame.getContentPane().add(lblOutput);
         
-        editAudioVideo = new VIDIVOXCutAudio(frame, mediaFile);
-        frameRate = new VIDIVOXFrameRate(frame, mediaFile);
-        frameSize  = new VIDIVOXFrameSize(frame, mediaFile);
-    }
-    
-    private void clearSettingsTable() {
-        editAudioVideo.clearCutSettings();
-        frameRate.clearFrameRateSettings();
-        frameSize.clearFrameSizeSettings();
+        String[] settingsColNames = {"Item", "Value"};
+        settingsTable = new JTable(new VIDIVOXSettingsTableModel(settingsColNames, VIDIVOXCommonInternals.COL_ROW));
+        settingsTable.setFillsViewportHeight(false);
+        settingsTable.setSize(500, 100);
+        settingsTable.getColumnModel().getColumn(0).setCellRenderer(new VIDIVOXCellRenderer());
+        settingsTable.getColumnModel().getColumn(1).setCellRenderer(new VIDIVOXCellRenderer());
+        Font font = settingsTable.getTableHeader().getFont();
+        settingsTable.getTableHeader().setFont(font.deriveFont(Font.BOLD));
+        
+        settingsScrollPane = new JScrollPane();
+        settingsScrollPane.setBounds(10, 471, 635, 126);
+        settingsScrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+        settingsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        settingsScrollPane.setVisible(true);
+        settingsScrollPane.setViewportView(settingsTable);
+        frame.getContentPane().add(settingsScrollPane);
+        
+        editAudioVideo = new VIDIVOXCutAudio(frame, settingsTable, mediaFile);
+        frameRate = new VIDIVOXFrameRate(frame, settingsTable, mediaFile);
+        frameSize  = new VIDIVOXFrameSize(frame, settingsTable, mediaFile);
     }
     
     private void setComponentsEnabled(boolean bEnabled) {
@@ -365,3 +379,4 @@ public class VIDIVOX extends VlcjTest{
         frameSize.setComponentsVisible(bEnabled);
     }
 }
+

@@ -126,5 +126,4 @@ public class VIDIVOXProcessBuilder {
     public String getProcessOutput() {
         return processOutput;
     }
-    
 }

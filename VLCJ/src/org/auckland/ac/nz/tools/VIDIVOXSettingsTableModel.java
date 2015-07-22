@@ -24,6 +24,8 @@ public class VIDIVOXSettingsTableModel extends DefaultTableModel {
     }
     
     public boolean isCellEditable(int rowIndex, int columnIndex) {
+        logger.logInfo("VIDIVOXSettingsTableModel::isCellEditable() Making column 1 (2nd column) editable");
         return columnIndex == 1;
     }
 }
+

@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 /**
@@ -28,9 +29,9 @@ public class VIDIVOXFrameRate extends VIDIVOXAudioVideoOperation {
     
     private JButton btnCancel;
     
-    public VIDIVOXFrameRate(JFrame mainFrame, 
-                                 File mediaFile) {
-        super(mainFrame, mediaFile, 3);
+    public VIDIVOXFrameRate(JFrame mainFrame, JTable settingsTable,
+            File mediaFile) {
+        super(mainFrame, mediaFile, settingsTable);
         logger.logInfo("VIDIVOXFrameRate::VIDIVOXFrameRate()");
         super.initialize();
         initialize();
@@ -138,8 +139,8 @@ public class VIDIVOXFrameRate extends VIDIVOXAudioVideoOperation {
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                clearFrameRateSettings();
-                frameRateSettings();
+                clearConfiguration();
+                setConfiguration();
             }
         });
         
@@ -154,7 +155,6 @@ public class VIDIVOXFrameRate extends VIDIVOXAudioVideoOperation {
     public void setComponentsVisible(boolean aFlag) {
         btnChangeFrameRate.setVisible(aFlag);
         btnCancel.setVisible(aFlag);
-        settingsTable.setVisible(aFlag);
         buttonsPanel.setVisible(aFlag);
         outputScrollPane.setVisible(aFlag);
     }
@@ -162,24 +162,11 @@ public class VIDIVOXFrameRate extends VIDIVOXAudioVideoOperation {
     public void setComponentsEnabled(boolean bEnabled) {
         btnChangeFrameRate.setEnabled(bEnabled);
         btnCancel.setEnabled(bEnabled);
-        settingsTable.setEnabled(bEnabled);
         buttonsPanel.setEnabled(bEnabled);
         outputScrollPane.setVisible(bEnabled);
     }
     
-    public void setMediaFile(File mediaFile) {
-        this.mediaFile = mediaFile;
-    }
-    
-    public void clearFrameRateSettings() {
-        logger.logInfo("VIDIVOXFrameRate::clearFrameRateSettings()");
-        if(((VIDIVOXSettingsTableModel)settingsTable.getModel()).getRowCount() > 0) {
-            ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(0);
-            ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(4);
-        }
-    }
-    
-    public void frameRateSettings() {
+    public void setConfiguration() {
         logger.logInfo("VIDIVOXFrameRate::frameRateSettings()");
         // First column
         //
@@ -204,5 +191,4 @@ public class VIDIVOXFrameRate extends VIDIVOXAudioVideoOperation {
             logger.logError(e.getMessage());
         }
     }
-
 }

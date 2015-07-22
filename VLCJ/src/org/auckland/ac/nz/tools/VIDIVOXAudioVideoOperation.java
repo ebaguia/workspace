@@ -42,41 +42,24 @@ public class VIDIVOXAudioVideoOperation {
     
     public JTextArea outputStreamTextArea = null;
     
-    public int numberOfCoulumns = 0;
+    public VIDIVOXSettingsTableModel settingsTableModel= null;
     
     public VIDIVOXAudioVideoOperation(JFrame mainFrame,
-                                      File mediaFile, 
-                                      int numberOfCoulumns) {
+                                      File mediaFile, JTable settingsTable) {
         logger.logInfo("VIDIVOXAudioVideoOperation::VIDIVOXAudioVideoOperation() Constructor");
         this.mainFrame = mainFrame; 
         this.mediaFile = mediaFile;
-        this.numberOfCoulumns = numberOfCoulumns;
+        this.settingsTable = settingsTable;
     }
     
     public void initialize() {
         logger.logInfo("VIDIVOXAudioVideoOperation::initialize()");
-        settingsScrollPane = new JScrollPane();
-        settingsScrollPane.setBounds(10, 471, 635, 129);
-        settingsScrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-        //settingsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        settingsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        mainFrame.getContentPane().add(settingsScrollPane);
         
         buttonsPanel = new JPanel();
         buttonsPanel.setBounds(657, 471, 126, 129);
         buttonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
         buttonsPanel.setLayout(null);
         mainFrame.getContentPane().add(buttonsPanel);
-        
-        settingsTable = new JTable(new VIDIVOXSettingsTableModel(settingsColNames, numberOfCoulumns));
-        settingsTable.setFillsViewportHeight(false);
-        settingsTable.setSize(500, 100);
-        settingsTable.getColumnModel().getColumn(0).setCellRenderer(new VIDIVOXCellRenderer());
-        settingsTable.getColumnModel().getColumn(1).setCellRenderer(new VIDIVOXCellRenderer());
-        Font font = settingsTable.getTableHeader().getFont();
-        settingsTable.getTableHeader().setFont(font.deriveFont(Font.BOLD));
-        
-        settingsScrollPane.setViewportView(settingsTable);
         
         outputStreamTextArea = new JTextArea();
         //outputStreamTextArea.setLineWrap(true);
@@ -88,4 +71,29 @@ public class VIDIVOXAudioVideoOperation {
         outputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         mainFrame.getContentPane().add(outputScrollPane);
     }
+    
+    public void setMediaFile(File mediaFile) {
+        this.mediaFile = mediaFile;
+    }
+    
+    public void setComponentsVisible() {
+        // Do nothing; need to override
+    }
+    
+    public void setComponentsEnabled() {
+        // Do nothing; need to override
+    }
+    
+    public void setConfiguration() {
+        // Do nothing; need to override
+    }
+    
+    public void clearConfiguration() {
+        logger.logInfo("VIDIVOXAudioVideoOperation::clearConfiguration()");
+        if(((VIDIVOXSettingsTableModel)settingsTable.getModel()).getRowCount() > 0) {
+            ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(0);
+            ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(VIDIVOXCommonInternals.COL_ROW);
+        }
+    }
 }
+

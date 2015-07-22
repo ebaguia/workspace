@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 /**
@@ -28,9 +29,9 @@ public class VIDIVOXCutAudio extends VIDIVOXAudioVideoOperation {
     
     private JButton btnCancel;
     
-    public VIDIVOXCutAudio(JFrame mainFrame, 
+    public VIDIVOXCutAudio(JFrame mainFrame, JTable settingsTable,
                                  File mediaFile) {
-        super(mainFrame, mediaFile, 4);
+        super(mainFrame, mediaFile, settingsTable);
         logger.logInfo("VIDIVOXCutAudio::VIDIVOXCutAudio()");
         super.initialize();
         initialize();
@@ -144,6 +145,13 @@ public class VIDIVOXCutAudio extends VIDIVOXAudioVideoOperation {
         btnCancel = new JButton();
         btnCancel.setBounds(10, 50, 105, 30);
         btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                clearConfiguration();
+                setConfiguration();
+            }
+        });
         
         buttonsPanel.add(btnCut);
         buttonsPanel.add(btnCancel);
@@ -156,7 +164,6 @@ public class VIDIVOXCutAudio extends VIDIVOXAudioVideoOperation {
     public void setComponentsVisible(boolean aFlag) {
         btnCut.setVisible(aFlag);
         btnCancel.setVisible(aFlag);
-        settingsTable.setVisible(aFlag);
         buttonsPanel.setVisible(aFlag);
         outputScrollPane.setVisible(aFlag);
     }
@@ -164,23 +171,12 @@ public class VIDIVOXCutAudio extends VIDIVOXAudioVideoOperation {
     public void setComponentsEnabled(boolean bEnabled) {
         btnCut.setEnabled(bEnabled);
         btnCancel.setEnabled(bEnabled);
-        settingsTable.setEnabled(bEnabled);
         buttonsPanel.setEnabled(bEnabled);
         outputScrollPane.setEnabled(bEnabled);
     }
     
-    public void setMediaFile(File mediaFile) {
-        this.mediaFile = mediaFile;
-    }
-    
-    public void clearCutSettings() {
-        if(((VIDIVOXSettingsTableModel)settingsTable.getModel()).getRowCount() > 0) {
-            ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(0);
-            ((VIDIVOXSettingsTableModel)settingsTable.getModel()).setRowCount(4);
-        }
-    }
-    
-    public void cutAudioSettings() {
+    public void setConfiguration() {
+        logger.logInfo("VIDIVOXCutAudio::cutAudioSettings()");
         // First column
         //
         settingsTable.setValueAt("Length (HH:mm:ss)", 0, 0);
@@ -208,5 +204,4 @@ public class VIDIVOXCutAudio extends VIDIVOXAudioVideoOperation {
         settingsTable.setValueAt("00:00:00", 0, 1);
         settingsTable.setValueAt("00:00:00", 1, 1);
     }
-
 }
