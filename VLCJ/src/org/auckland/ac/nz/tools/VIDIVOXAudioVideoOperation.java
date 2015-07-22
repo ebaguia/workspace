@@ -3,6 +3,7 @@
  */
 package org.auckland.ac.nz.tools;
 
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -58,6 +59,11 @@ public class VIDIVOXAudioVideoOperation {
     
     public void initialize() {
         logger.logInfo("VIDIVOXAudioVideoOperation::initialize()");
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = gbc.weighty = 1.0;
+        
+        gbc.gridy = 1;
         btnCancel = new JButton();
         btnCancel.setText("Reset");
         btnCancel.addActionListener(new ActionListener() {
@@ -67,10 +73,11 @@ public class VIDIVOXAudioVideoOperation {
                 setConfiguration();
             }
         });
-        buttonsPanel.add(btnCancel);
+        buttonsPanel.add(btnCancel, gbc);
         
+        gbc.gridy = 0;
         btnOperation = new JButton();
-        buttonsPanel.add(btnOperation);
+        buttonsPanel.add(btnOperation, gbc);
     }
     
     public void setMediaFile(File mediaFile) {

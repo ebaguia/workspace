@@ -1,8 +1,10 @@
 package org.auckland.ac.nz.tools;
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 
@@ -66,6 +69,10 @@ public class VIDIVOX{
     
     private JTabbedPane tabbedPane = null;
     
+    private JPanel mediaFilenamePanel = null;
+    
+    private JLabel mediaFilename = null;
+    
     /**
      * Launch the application.
      */
@@ -97,7 +104,7 @@ public class VIDIVOX{
         VIDIVOXLogger.getInstance();
         frame = new JFrame();
         frame.getContentPane().setBackground(new Color(240, 230, 140));
-        frame.setBounds(200, 200, 793, 787);
+        frame.setBounds(200, 200, 783, 763);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -132,6 +139,8 @@ public class VIDIVOX{
                         mediaController = new VIDIVOXMediaController(mediaPlayerComponent);
                         mediaController.setMediaFile(mediaFile);
                         mediaController.play();
+                        
+                        mediaFilename.setText("\"" + mediaFile.getCanonicalPath() + "\"");
                         
                         //MediaMeta mediaData = mediaPlayerComponent.getMediaPlayer().getMediaMeta();
                         //logger.logInfo("URL: " + mediaData.getUrl());
@@ -170,26 +179,6 @@ public class VIDIVOX{
             }
         });
         mnFile.add(menuItems[VIDIVOXCommonInternals.MenuItems.OPEN.ordinal()]);
-        
-        // FILE -> SAVE Menu
-        //
-        menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()] = new JMenu(VIDIVOXCommonInternals.MENU_FILE_SAVE);
-        menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()].setMnemonic('s');
-        menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()].addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    mediaFile = notification.openSaveFile(FileOperation.SAVE_FILE);
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            }
-        });
-        // TODO: save file functionality
-        //
-        menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()].setEnabled(false);
-        mnFile.add(menuItems[VIDIVOXCommonInternals.MenuItems.SAVE.ordinal()]);
         
         // FILE -> EXIT Menu
         //
@@ -292,6 +281,12 @@ public class VIDIVOX{
         });
         mnEdit.add(menuItems[VIDIVOXCommonInternals.MenuItems.CFS.ordinal()]);
         
+        // HELP Menu
+        //
+        JMenu mnHelp = new JMenu(VIDIVOXCommonInternals.MENU_HELP);
+        menuBar.add(mnHelp);
+        mnHelp.setMnemonic('h');
+        
         // Initialize the VLCJ media player
         //
         mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
@@ -305,6 +300,16 @@ public class VIDIVOX{
         playerControlsPane.setBorder(new LineBorder(new Color(0, 0, 0)));
         playerControlsPane.setBounds(0, 364, 793, 89);
         frame.getContentPane().add(playerControlsPane);
+        
+        mediaFilenamePanel = new JPanel();
+        mediaFilenamePanel.setBounds(0, 454, 793, 35);
+        mediaFilenamePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+        mediaFilenamePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JLabel labelMediaFilename = new JLabel("Current media file: ");
+        mediaFilename = new JLabel("<none>");
+        mediaFilenamePanel.add(labelMediaFilename);
+        mediaFilenamePanel.add(mediaFilename);
+        frame.getContentPane().add(mediaFilenamePanel);
         
         notification = new VIDIVOXUserNotifications(frame, mediaPlayerComponent);
         
@@ -331,13 +336,13 @@ public class VIDIVOX{
         outputAreaScrollPane = new JScrollPane(outputStreamTextArea);
         outputAreaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         outputAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        tabbedPane.setBounds(0, 454, 793, 220);
+        tabbedPane.setBounds(0, 490, 675, 252);
         tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
         tabbedPane.add("Output", outputAreaScrollPane);
         frame.getContentPane().add(tabbedPane);
         
         buttonsPanel = new JPanel();
-        buttonsPanel.setBounds(0, 675, 793, 63);
+        buttonsPanel.setBounds(676, 490, 117, 252);
         buttonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
         buttonsPanel.setLayout(new GridBagLayout());
         frame.getContentPane().add(buttonsPanel);

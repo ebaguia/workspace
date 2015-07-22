@@ -54,6 +54,8 @@ public final class VIDIVOXCommonInternals {
     public final static String MENU_EDIT_CFR = "Change Frame Rate";
     public final static String MENU_EDIT_CFS = "Change Frame Size";
     
+    public final static String MENU_HELP = "Help";
+    
     public final static String FFMPEG_BIN = "/usr/local/bin/ffmpeg";
     public final static String FFMPEG_SECONDS = "00:00:";
     
